@@ -1,0 +1,11 @@
+c:\users\feno\documents\visual studio 2012\Projects\evaluation\evaluation\bin\Debug\evaluation.exe.config
+c:\users\feno\documents\visual studio 2012\Projects\evaluation\evaluation\bin\Debug\evaluation.exe
+c:\users\feno\documents\visual studio 2012\Projects\evaluation\evaluation\bin\Debug\evaluation.pdb
+c:\users\feno\documents\visual studio 2012\Projects\evaluation\evaluation\obj\Debug\evaluation.csprojResolveAssemblyReference.cache
+c:\users\feno\documents\visual studio 2012\Projects\evaluation\evaluation\obj\Debug\evaluation.Form1.resources
+c:\users\feno\documents\visual studio 2012\Projects\evaluation\evaluation\obj\Debug\evaluation.Properties.Resources.resources
+c:\users\feno\documents\visual studio 2012\Projects\evaluation\evaluation\obj\Debug\evaluation.csproj.GenerateResource.Cache
+c:\users\feno\documents\visual studio 2012\Projects\evaluation\evaluation\obj\Debug\evaluation.exe
+c:\users\feno\documents\visual studio 2012\Projects\evaluation\evaluation\obj\Debug\evaluation.pdb
+c:\users\feno\documents\visual studio 2012\Projects\evaluation\evaluation\obj\Debug\evaluation.uc.Data.resources
+c:\users\feno\documents\visual studio 2012\Projects\evaluation\evaluation\obj\Debug\evaluation.uc.Evaluation.resources
