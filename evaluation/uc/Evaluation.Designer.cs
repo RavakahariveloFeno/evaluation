@@ -31,10 +31,15 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.panel2 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.tTauxCoef = new System.Windows.Forms.NumericUpDown();
+            this.tTauxObjectif = new System.Windows.Forms.NumericUpDown();
+            this.tTauxPoid = new System.Windows.Forms.NumericUpDown();
+            this.label17 = new System.Windows.Forms.Label();
             this.tNoteCoef = new System.Windows.Forms.NumericUpDown();
             this.tNoteObjectif = new System.Windows.Forms.NumericUpDown();
             this.tNotePoid = new System.Windows.Forms.NumericUpDown();
@@ -79,16 +84,16 @@
             this.label2 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.tTauxCoef = new System.Windows.Forms.NumericUpDown();
-            this.tTauxObjectif = new System.Windows.Forms.NumericUpDown();
-            this.tTauxPoid = new System.Windows.Forms.NumericUpDown();
-            this.label17 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel2.SuspendLayout();
             this.panel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tTauxCoef)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tTauxObjectif)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tTauxPoid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tNoteCoef)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tNoteObjectif)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tNotePoid)).BeginInit();
@@ -111,9 +116,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.tContributionObjectif)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tContributionPoid)).BeginInit();
             this.panel4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tTauxCoef)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tTauxObjectif)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tTauxPoid)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -122,7 +124,7 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 2.541296F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 97.4587F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 28F));
             this.tableLayoutPanel1.Controls.Add(this.panel1, 1, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -131,7 +133,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 2.556391F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 97.44361F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1335, 690);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1335, 848);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // panel1
@@ -139,28 +141,38 @@
             this.panel1.Controls.Add(this.panel3);
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(36, 20);
+            this.panel1.Location = new System.Drawing.Point(36, 24);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1269, 642);
+            this.panel1.Size = new System.Drawing.Size(1267, 796);
             this.panel1.TabIndex = 0;
             // 
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.Transparent;
+            this.panel3.Controls.Add(this.dataGridView2);
             this.panel3.Controls.Add(this.dataGridView1);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(0, 317);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1269, 325);
+            this.panel3.Size = new System.Drawing.Size(1267, 479);
             this.panel3.TabIndex = 1;
+            // 
+            // dataGridView2
+            // 
+            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView2.Location = new System.Drawing.Point(0, 252);
+            this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.Size = new System.Drawing.Size(623, 224);
+            this.dataGridView2.TabIndex = 1;
+            this.dataGridView2.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellContentClick_1);
             // 
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Top;
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(1269, 325);
+            this.dataGridView1.Size = new System.Drawing.Size(1267, 229);
             this.dataGridView1.TabIndex = 0;
             // 
             // panel2
@@ -171,7 +183,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1269, 317);
+            this.panel2.Size = new System.Drawing.Size(1267, 317);
             this.panel2.TabIndex = 0;
             // 
             // button1
@@ -229,6 +241,57 @@
             this.panel5.Size = new System.Drawing.Size(680, 297);
             this.panel5.TabIndex = 1;
             // 
+            // tTauxCoef
+            // 
+            this.tTauxCoef.Location = new System.Drawing.Point(478, 33);
+            this.tTauxCoef.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.tTauxCoef.Name = "tTauxCoef";
+            this.tTauxCoef.Size = new System.Drawing.Size(93, 20);
+            this.tTauxCoef.TabIndex = 48;
+            this.tTauxCoef.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tTauxCoef.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
+            // 
+            // tTauxObjectif
+            // 
+            this.tTauxObjectif.Location = new System.Drawing.Point(350, 33);
+            this.tTauxObjectif.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.tTauxObjectif.Name = "tTauxObjectif";
+            this.tTauxObjectif.Size = new System.Drawing.Size(93, 20);
+            this.tTauxObjectif.TabIndex = 47;
+            this.tTauxObjectif.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tTauxObjectif.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
+            // 
+            // tTauxPoid
+            // 
+            this.tTauxPoid.Location = new System.Drawing.Point(221, 33);
+            this.tTauxPoid.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.tTauxPoid.Name = "tTauxPoid";
+            this.tTauxPoid.Size = new System.Drawing.Size(93, 20);
+            this.tTauxPoid.TabIndex = 46;
+            this.tTauxPoid.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tTauxPoid.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(7, 35);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(40, 13);
+            this.label17.TabIndex = 45;
+            this.label17.Text = "Taux : ";
+            // 
             // tNoteCoef
             // 
             this.tNoteCoef.Location = new System.Drawing.Point(478, 263);
@@ -240,6 +303,8 @@
             this.tNoteCoef.Name = "tNoteCoef";
             this.tNoteCoef.Size = new System.Drawing.Size(93, 20);
             this.tNoteCoef.TabIndex = 44;
+            this.tNoteCoef.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tNoteCoef.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
             // 
             // tNoteObjectif
             // 
@@ -252,6 +317,8 @@
             this.tNoteObjectif.Name = "tNoteObjectif";
             this.tNoteObjectif.Size = new System.Drawing.Size(93, 20);
             this.tNoteObjectif.TabIndex = 43;
+            this.tNoteObjectif.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tNoteObjectif.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
             // 
             // tNotePoid
             // 
@@ -264,6 +331,8 @@
             this.tNotePoid.Name = "tNotePoid";
             this.tNotePoid.Size = new System.Drawing.Size(93, 20);
             this.tNotePoid.TabIndex = 42;
+            this.tNotePoid.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tNotePoid.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
             // 
             // tT2bSolutionCoef
             // 
@@ -276,6 +345,8 @@
             this.tT2bSolutionCoef.Name = "tT2bSolutionCoef";
             this.tT2bSolutionCoef.Size = new System.Drawing.Size(93, 20);
             this.tT2bSolutionCoef.TabIndex = 41;
+            this.tT2bSolutionCoef.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tT2bSolutionCoef.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
             // 
             // tT2bSolutionObjectif
             // 
@@ -288,6 +359,8 @@
             this.tT2bSolutionObjectif.Name = "tT2bSolutionObjectif";
             this.tT2bSolutionObjectif.Size = new System.Drawing.Size(93, 20);
             this.tT2bSolutionObjectif.TabIndex = 40;
+            this.tT2bSolutionObjectif.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tT2bSolutionObjectif.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
             // 
             // tT2bSolutionPoid
             // 
@@ -300,6 +373,8 @@
             this.tT2bSolutionPoid.Name = "tT2bSolutionPoid";
             this.tT2bSolutionPoid.Size = new System.Drawing.Size(93, 20);
             this.tT2bSolutionPoid.TabIndex = 39;
+            this.tT2bSolutionPoid.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tT2bSolutionPoid.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
             // 
             // tT2bPersCoef
             // 
@@ -312,6 +387,8 @@
             this.tT2bPersCoef.Name = "tT2bPersCoef";
             this.tT2bPersCoef.Size = new System.Drawing.Size(93, 20);
             this.tT2bPersCoef.TabIndex = 38;
+            this.tT2bPersCoef.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tT2bPersCoef.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
             // 
             // tT2bPersObjectif
             // 
@@ -324,6 +401,8 @@
             this.tT2bPersObjectif.Name = "tT2bPersObjectif";
             this.tT2bPersObjectif.Size = new System.Drawing.Size(93, 20);
             this.tT2bPersObjectif.TabIndex = 37;
+            this.tT2bPersObjectif.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tT2bPersObjectif.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
             // 
             // tT2bPersPoid
             // 
@@ -336,6 +415,8 @@
             this.tT2bPersPoid.Name = "tT2bPersPoid";
             this.tT2bPersPoid.Size = new System.Drawing.Size(93, 20);
             this.tT2bPersPoid.TabIndex = 36;
+            this.tT2bPersPoid.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tT2bPersPoid.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
             // 
             // tQuizCoef
             // 
@@ -348,6 +429,8 @@
             this.tQuizCoef.Name = "tQuizCoef";
             this.tQuizCoef.Size = new System.Drawing.Size(93, 20);
             this.tQuizCoef.TabIndex = 35;
+            this.tQuizCoef.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tQuizCoef.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
             // 
             // tQuizObjectif
             // 
@@ -360,6 +443,8 @@
             this.tQuizObjectif.Name = "tQuizObjectif";
             this.tQuizObjectif.Size = new System.Drawing.Size(93, 20);
             this.tQuizObjectif.TabIndex = 34;
+            this.tQuizObjectif.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tQuizObjectif.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
             // 
             // tQuizPoid
             // 
@@ -372,6 +457,8 @@
             this.tQuizPoid.Name = "tQuizPoid";
             this.tQuizPoid.Size = new System.Drawing.Size(93, 20);
             this.tQuizPoid.TabIndex = 33;
+            this.tQuizPoid.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tQuizPoid.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
             // 
             // tQualiteCoef
             // 
@@ -384,6 +471,8 @@
             this.tQualiteCoef.Name = "tQualiteCoef";
             this.tQualiteCoef.Size = new System.Drawing.Size(93, 20);
             this.tQualiteCoef.TabIndex = 32;
+            this.tQualiteCoef.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tQualiteCoef.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
             // 
             // tQualiteObjectif
             // 
@@ -396,6 +485,8 @@
             this.tQualiteObjectif.Name = "tQualiteObjectif";
             this.tQualiteObjectif.Size = new System.Drawing.Size(93, 20);
             this.tQualiteObjectif.TabIndex = 31;
+            this.tQualiteObjectif.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tQualiteObjectif.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
             // 
             // tQualitePoid
             // 
@@ -408,6 +499,8 @@
             this.tQualitePoid.Name = "tQualitePoid";
             this.tQualitePoid.Size = new System.Drawing.Size(93, 20);
             this.tQualitePoid.TabIndex = 30;
+            this.tQualitePoid.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tQualitePoid.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
             // 
             // tDmtCoef
             // 
@@ -420,6 +513,8 @@
             this.tDmtCoef.Name = "tDmtCoef";
             this.tDmtCoef.Size = new System.Drawing.Size(93, 20);
             this.tDmtCoef.TabIndex = 29;
+            this.tDmtCoef.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tDmtCoef.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
             // 
             // tDmtObjectif
             // 
@@ -432,6 +527,8 @@
             this.tDmtObjectif.Name = "tDmtObjectif";
             this.tDmtObjectif.Size = new System.Drawing.Size(93, 20);
             this.tDmtObjectif.TabIndex = 28;
+            this.tDmtObjectif.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tDmtObjectif.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
             // 
             // tDmtPoid
             // 
@@ -444,6 +541,8 @@
             this.tDmtPoid.Name = "tDmtPoid";
             this.tDmtPoid.Size = new System.Drawing.Size(93, 20);
             this.tDmtPoid.TabIndex = 27;
+            this.tDmtPoid.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tDmtPoid.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
             // 
             // tContributionCoef
             // 
@@ -456,6 +555,8 @@
             this.tContributionCoef.Name = "tContributionCoef";
             this.tContributionCoef.Size = new System.Drawing.Size(93, 20);
             this.tContributionCoef.TabIndex = 26;
+            this.tContributionCoef.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tContributionCoef.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
             // 
             // tContributionObjectif
             // 
@@ -468,6 +569,8 @@
             this.tContributionObjectif.Name = "tContributionObjectif";
             this.tContributionObjectif.Size = new System.Drawing.Size(93, 20);
             this.tContributionObjectif.TabIndex = 25;
+            this.tContributionObjectif.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tContributionObjectif.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
             // 
             // tContributionPoid
             // 
@@ -480,6 +583,8 @@
             this.tContributionPoid.Name = "tContributionPoid";
             this.tContributionPoid.Size = new System.Drawing.Size(93, 20);
             this.tContributionPoid.TabIndex = 24;
+            this.tContributionPoid.ValueChanged += new System.EventHandler(this.tContributionPoid_ValueChanged);
+            this.tContributionPoid.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tContributionPoid_KeyPress);
             // 
             // label16
             // 
@@ -705,65 +810,24 @@
             this.label1.TabIndex = 24;
             this.label1.Text = "Trigramme";
             // 
-            // tTauxCoef
-            // 
-            this.tTauxCoef.Location = new System.Drawing.Point(478, 33);
-            this.tTauxCoef.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.tTauxCoef.Name = "tTauxCoef";
-            this.tTauxCoef.Size = new System.Drawing.Size(93, 20);
-            this.tTauxCoef.TabIndex = 48;
-            // 
-            // tTauxObjectif
-            // 
-            this.tTauxObjectif.Location = new System.Drawing.Point(350, 33);
-            this.tTauxObjectif.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.tTauxObjectif.Name = "tTauxObjectif";
-            this.tTauxObjectif.Size = new System.Drawing.Size(93, 20);
-            this.tTauxObjectif.TabIndex = 47;
-            // 
-            // tTauxPoid
-            // 
-            this.tTauxPoid.Location = new System.Drawing.Point(221, 33);
-            this.tTauxPoid.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.tTauxPoid.Name = "tTauxPoid";
-            this.tTauxPoid.Size = new System.Drawing.Size(93, 20);
-            this.tTauxPoid.TabIndex = 46;
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(7, 35);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(40, 13);
-            this.label17.TabIndex = 45;
-            this.label17.Text = "Taux : ";
-            // 
             // Evaluation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Evaluation";
-            this.Size = new System.Drawing.Size(1335, 690);
+            this.Size = new System.Drawing.Size(1335, 848);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tTauxCoef)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tTauxObjectif)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tTauxPoid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tNoteCoef)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tNoteObjectif)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tNotePoid)).EndInit();
@@ -787,9 +851,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.tContributionPoid)).EndInit();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tTauxCoef)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tTauxObjectif)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tTauxPoid)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -851,5 +912,6 @@
         private System.Windows.Forms.NumericUpDown tTauxObjectif;
         private System.Windows.Forms.NumericUpDown tTauxPoid;
         private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.DataGridView dataGridView2;
     }
 }

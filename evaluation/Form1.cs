@@ -36,7 +36,7 @@ namespace evaluation
         private void button2_Click(object sender, EventArgs e)
         {
             pbody.Controls.Clear();
-            evaluationControls.Dock = DockStyle.Fill;
+            evaluationControls.Dock = DockStyle.Top;
             pbody.Controls.Add(evaluationControls);
         }
     }

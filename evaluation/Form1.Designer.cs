@@ -74,6 +74,7 @@
             // 
             // pbody
             // 
+            this.pbody.AutoScroll = true;
             this.pbody.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pbody.Location = new System.Drawing.Point(0, 33);
             this.pbody.Name = "pbody";
@@ -84,6 +85,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(1319, 651);
             this.Controls.Add(this.pbody);
             this.Controls.Add(this.panel1);
