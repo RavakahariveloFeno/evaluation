@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "evaluation", "evaluation\evaluation.csproj", "{5DD041D0-54D7-4FD8-BC30-A6E455F77460}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commission", "commission\commission.csproj", "{5DD041D0-54D7-4FD8-BC30-A6E455F77460}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

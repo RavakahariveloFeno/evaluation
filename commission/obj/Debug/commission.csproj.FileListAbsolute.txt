@@ -1,0 +1,13 @@
+C:\Users\USER\Documents\Visual Studio 2012\Projects\commission\commission\bin\Debug\commission.exe.config
+C:\Users\USER\Documents\Visual Studio 2012\Projects\commission\commission\bin\Debug\commission.exe
+C:\Users\USER\Documents\Visual Studio 2012\Projects\commission\commission\bin\Debug\commission.pdb
+C:\Users\USER\Documents\Visual Studio 2012\Projects\commission\commission\obj\Debug\evaluation.Form1.resources
+C:\Users\USER\Documents\Visual Studio 2012\Projects\commission\commission\obj\Debug\commission.Properties.Resources.resources
+C:\Users\USER\Documents\Visual Studio 2012\Projects\commission\commission\obj\Debug\evaluation.uc.Accueil.resources
+C:\Users\USER\Documents\Visual Studio 2012\Projects\commission\commission\obj\Debug\evaluation.uc.Data.resources
+C:\Users\USER\Documents\Visual Studio 2012\Projects\commission\commission\obj\Debug\evaluation.uc.Evaluation.resources
+C:\Users\USER\Documents\Visual Studio 2012\Projects\commission\commission\obj\Debug\evaluation.uc.Settings.resources
+C:\Users\USER\Documents\Visual Studio 2012\Projects\commission\commission\obj\Debug\evaluation.window.ExportType.resources
+C:\Users\USER\Documents\Visual Studio 2012\Projects\commission\commission\obj\Debug\commission.csproj.GenerateResource.Cache
+C:\Users\USER\Documents\Visual Studio 2012\Projects\commission\commission\obj\Debug\commission.exe
+C:\Users\USER\Documents\Visual Studio 2012\Projects\commission\commission\obj\Debug\commission.pdb

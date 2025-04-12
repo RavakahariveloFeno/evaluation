@@ -84,7 +84,7 @@
             // pictureBox2
             // 
             this.pictureBox2.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.pictureBox2.Image = global::evaluation.Properties.Resources.call_center_e_carater_de_atendimento_ao_cliente_344186_4876;
+            this.pictureBox2.Image = global::commission.Properties.Resources.call_center_e_carater_de_atendimento_ao_cliente_344186_4876;
             this.pictureBox2.Location = new System.Drawing.Point(479, 238);
             this.pictureBox2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.pictureBox2.Name = "pictureBox2";
@@ -96,7 +96,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.pictureBox1.Image = global::evaluation.Properties.Resources.flache_call_center_agent_design_23_2147942777;
+            this.pictureBox1.Image = global::commission.Properties.Resources.flache_call_center_agent_design_23_2147942777;
             this.pictureBox1.Location = new System.Drawing.Point(124, 238);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.pictureBox1.Name = "pictureBox1";

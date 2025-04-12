@@ -7,8 +7,8 @@
     <ProjectGuid>{5DD041D0-54D7-4FD8-BC30-A6E455F77460}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>evaluation</RootNamespace>
-    <AssemblyName>evaluation</AssemblyName>
+    <RootNamespace>commission</RootNamespace>
+    <AssemblyName>commission</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
