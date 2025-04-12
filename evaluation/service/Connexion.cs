@@ -168,5 +168,106 @@ namespace evaluation.service
             }
         }
 
+        public bool updateIndicateur(string id, int poid, int objectif, int coef)
+        {
+            try
+            {
+                // Ouvrir la connexion
+                connection.Open();
+
+                // Récupération du nom de la première feuille
+                DataTable sheets = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                if (sheets == null || sheets.Rows.Count == 0)
+                {
+                    MessageBox.Show("Aucune feuille trouvée dans le fichier Excel.");
+                    return false;
+                }
+
+                string sheetName = sheets.Rows[0]["TABLE_NAME"].ToString(); // Nom de la première feuille
+
+                // Requête UPDATE pour modifier la valeur de la colonne correspondante
+                string query = "UPDATE [" + sheetName + "] SET Poids = ?, Objectif = ?, Coefficient = ? WHERE id = ?";
+
+                using (OleDbCommand cmd = new OleDbCommand(query, connection))
+                {
+                    // Ajouter les paramètres
+                    cmd.Parameters.AddWithValue("@Poids", poid);
+                    cmd.Parameters.AddWithValue("@Objectif", objectif);
+                    cmd.Parameters.AddWithValue("@Coefficient", coef);
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    // Exécuter la requête
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    // Vérifier si la mise à jour a été effectuée
+                    return rowsAffected > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erreur lors de la mise à jour : " + ex.Message);
+                return false;
+            }
+            finally
+            {
+                // Fermer la connexion
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        public bool updatePv(string id, decimal pv1, decimal pv2, decimal pv3,decimal montant,string observation)
+        {
+            try
+            {
+                // Ouvrir la connexion
+                connection.Open();
+
+                // Récupération du nom de la première feuille
+                DataTable sheets = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                if (sheets == null || sheets.Rows.Count == 0)
+                {
+                    MessageBox.Show("Aucune feuille trouvée dans le fichier Excel.");
+                    return false;
+                }
+
+                string sheetName = sheets.Rows[0]["TABLE_NAME"].ToString(); // Nom de la première feuille
+
+                // Requête UPDATE pour modifier la valeur de la colonne correspondante
+                string query = "UPDATE [" + sheetName + "] SET PV1 = ?,PV2 = ?,PV3 = ?,Montant_commission= ?,observations=? WHERE Trigramme = ?";
+
+                using (OleDbCommand cmd = new OleDbCommand(query, connection))
+                {
+                    // Ajouter les paramètres
+                    cmd.Parameters.AddWithValue("@PV1", pv1);
+                    cmd.Parameters.AddWithValue("@PV2", pv2);
+                    cmd.Parameters.AddWithValue("@PV3", pv3);
+                    cmd.Parameters.AddWithValue("@Montant_commission", montant.ToString());
+                    cmd.Parameters.AddWithValue("@observations", observation);
+                    cmd.Parameters.AddWithValue("@Trigramme", id);
+
+                    // Exécuter la requête
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    // Vérifier si la mise à jour a été effectuée
+                    return rowsAffected > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erreur lors de la mise à jour : " + ex.Message);
+                return false;
+            }
+            finally
+            {
+                // Fermer la connexion
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+        }
     }
 }

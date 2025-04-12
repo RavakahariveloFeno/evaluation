@@ -12,40 +12,158 @@ namespace evaluation.uc
 {
     public partial class Evaluation : UserControl
     {
+        string[] Mois = new string[] 
+        {
+            "janvier", "février", "mars", "avril", "mai", "juin",
+            "juillet", "août", "septembre", "octobre", "novembre", "décembre"
+        };
+
+        decimal tContributionPoid, tContributionObjectif, tContributionCoef, tDmtPoid, tDmtObjectif, tDmtCoef, tQualitePoid, tQualiteObjectif, tQualiteCoef, tQuizPoid, tQuizObjectif, tQuizCoef, tT2bPersPoid, tT2bPersObjectif, tT2bPersCoef, tT2bSolutionPoid, tT2bSolutionObjectif, tT2bSolutionCoef, tNotePoid;
         service.DataService _dataService;
         service.EvaluationService _evaluationService;
-        Commission realisation = new Commission();
-        Commission ro = new Commission();
-        Commission resultatPondere = new Commission();
+        service.CsvService _csvService;
+        decimal baseNumeriale = 0, montant = 0;
+
+        type.Commission realisation = new type.Commission();
+        type.Commission ro = new type.Commission();
+        type.Commission resultatPondere = new type.Commission();
 
         public Evaluation()
         {
             InitializeComponent();
+            dataGridView1.RowPrePaint += dataGridView1_RowPrePaint;
+            dataGridView1.DataBindingComplete += dataGridView1_DataBindingComplete;
+
+            dataGridView1.DefaultCellStyle.Font = new Font("Arial", 11);
+
             _dataService = new service.DataService();
             _evaluationService = new service.EvaluationService();
+            _csvService = new service.CsvService();
 
+
+            getParametre();
             getAllTrigram();
             getAllEvaluation();
             getAllIndicateur();
         }
 
+        private void dataGridView1_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            DataGridView dgv = sender as DataGridView;
+            dgv.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+            dgv.RowTemplate.Height = 80;
+
+            foreach (DataGridViewRow row in dgv.Rows)
+            {
+                row.Height = 80;
+            }
+        }
+
+
+        private void dataGridView1_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            DataGridView dgv = sender as DataGridView;
+
+            if (e.RowIndex < 0 || e.RowIndex >= dgv.Rows.Count)
+                return;
+
+            // Appliquer une couleur différente selon la ligne avec des codes RGB
+            switch (e.RowIndex)
+            {
+                case 0:
+                    dgv.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(145 ,100 ,205);
+                    break;
+                case 1:
+                    dgv.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(255 ,121 ,0);
+                    break;
+                case 2:
+                    dgv.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(255 ,121 ,0);
+                    break;
+                case 3:
+                    dgv.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(75 ,180 ,230);
+                    break;
+                case 4:
+                    dgv.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(75 ,180 ,230);
+                    break;
+                case 5:
+                    dgv.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(255 ,180 ,230);
+                    break;
+                case 6:
+                    dgv.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(255 ,180 ,230);
+                    break;
+                case 7:
+                    dgv.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(255 ,210 ,0);
+                    break;
+                default:
+                    dgv.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 255); // White
+                    break;
+            }
+        }
+
+
+
+        private void getParametre(){
+            decimal[] csv = _csvService.ReadValues();
+
+            if (csv != null && csv.Length > 1) // ✅ Vérification pour éviter l'erreur
+            {
+                baseNumeriale = csv[0];
+                montant = csv[1];
+            }
+            else
+            {
+                baseNumeriale = 0; // Valeur par défaut
+                montant = 0;       // Valeur par défaut
+            }
+        }
+
         private void getAllEvaluation()
         {
-            DataTable dt = _evaluationService.getAll("indicateur,Information_sur_le_coeficient");
-            //DataTable dt = _evaluationService.getAll("indicateur,poid,objectif,Information_sur_le_coeficient,coef");
+            DataTable dt = _evaluationService.getAll("Indicateurs,Information_sur_le_coeficient");
 
             if (dt != null && dt.Rows.Count > 0)
             {
-                dt.Columns.Add("realisation", typeof(string));
-                dt.Columns.Add("R/O", typeof(string));
-                dt.Columns.Add("Resultat_pondéré", typeof(string));
+                string contributionCoef = dt.Rows[1]["Information_sur_le_coeficient"].ToString().Replace("{x}", tContributionCoef.ToString());
+                string qualiteCoef = dt.Rows[3]["Information_sur_le_coeficient"].ToString().Replace("{x}", tQualiteCoef.ToString());
+                string quizzCoef = dt.Rows[4]["Information_sur_le_coeficient"].ToString().Replace("{x}", tQuizCoef.ToString());
+                string personalitionCoef = dt.Rows[5]["Information_sur_le_coeficient"].ToString().Replace("{x}", tT2bPersCoef.ToString());
+                string solutionCoef = dt.Rows[6]["Information_sur_le_coeficient"].ToString().Replace("{x}", tT2bSolutionCoef.ToString());
+                // Modification des valeurs de chaque ligne individuellement
+                dt.Rows[1]["Information_sur_le_coeficient"] = contributionCoef;
+                dt.Rows[3]["Information_sur_le_coeficient"] = qualiteCoef;
+                dt.Rows[4]["Information_sur_le_coeficient"] = quizzCoef;
+                dt.Rows[5]["Information_sur_le_coeficient"] = personalitionCoef;
+                dt.Rows[6]["Information_sur_le_coeficient"] = solutionCoef;
 
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                // Ajouter les nouvelles colonnes
+                dt.Columns.Add("Poids", typeof(string));
+                dt.Columns.Add("Objectif", typeof(string));
+                dt.Columns.Add("Coefficient", typeof(string));
+                dt.Columns.Add("Réalisation", typeof(string));
+                dt.Columns.Add("R/O", typeof(string));
+                dt.Columns.Add("Résultat_pondéré", typeof(string));
+
+                // Configuration du DataGridView
+                dataGridView1.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+                dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+                dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
                 dataGridView1.Columns.Clear();
                 dataGridView1.DataSource = dt;
+                dataGridView1.AllowUserToAddRows = false;
 
-                // Vérifier que les lignes existent avant d'accéder aux cellules
+                // Ajuster la largeur des colonnes
+                //dataGridView1.Columns["indicateur"].Width = 200;
+                //dataGridView1.Columns["Information_sur_le_coeficient"].Width = 250;
+
+                dataGridView1.DefaultCellStyle.Padding = new Padding(3);
+
+                // Définir les polices
+                dataGridView1.DefaultCellStyle.Font = new Font("Arial", 11, FontStyle.Regular);
+                dataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 11, FontStyle.Bold);
+
+                // Vérifier l'existence des lignes avant d'accéder aux cellules
                 if (dataGridView1.Rows.Count > 1)
                 {
                     displayValueCommission(dataGridView1);
@@ -56,24 +174,48 @@ namespace evaluation.uc
                 MessageBox.Show("Aucune donnée disponible.");
             }
 
-            dataGridView2.Columns.Clear();
-            dataGridView2.Columns.Add("Col1", "Formule");
-            dataGridView2.Columns.Add("Col2", "Valeur");
+            // Calcul et affichage des valeurs
+            decimal ab = Math.Round(resultatPondere.contribution + resultatPondere.dmt, 2);
+            decimal cdef = Math.Round(resultatPondere.qualite + resultatPondere.quizz + resultatPondere.t2bPersonalisation + resultatPondere.t2bSolution, 2);
+            decimal g = realisation.notemanageriale;
 
-            decimal ab = resultatPondere.contribution + resultatPondere.dmt;
-            decimal cdef = resultatPondere.qualite + resultatPondere.quizz + resultatPondere.t2bPersonalisation + resultatPondere.t2bSolution;
-            decimal g = 0;
+            lpv1.Text = ab.ToString() + "%";
+            lpv2.Text = cdef.ToString() + "%";
+            lpv3.Text = g.ToString() + "%";
+            latteinte.Text = Math.Round((ab + cdef + g), 2).ToString() + "%";
+            lbase.Text = baseNumeriale.ToString("#,##0") + " Ar";
+            lpvvfinal.Text = Math.Round((ab/100 + cdef/100 + g/100) * baseNumeriale, 2).ToString("#,##0") + " Ar";
+            lmontant.Text = montant.ToString("#,##0") + " Ar";
 
-            dataGridView2.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            dataGridView2.Rows.Add("PV1 = Somme résultat [(A) + (B)]", ab);
-            dataGridView2.Rows.Add("PV2 = Somme résultat [(C ) + (D) + ( E) + (F)]", cdef);
-            dataGridView2.Rows.Add("PV3 = résultat (G)",g);
-            dataGridView2.Rows.Add("% d'atteinte des objectifs",ab+cdef+g);
-            dataGridView2.Rows.Add("Base numéraire",0);
-            dataGridView2.Rows.Add("PVV final",0);
-            dataGridView2.Rows.Add("Montant commission en Ar arrondi",0);
-            dataGridView2.Rows.Add("Observations","");
+            // Mise en forme conditionnelle pour Résultat_pondéré > Poids
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                if (row.Index == 0) continue; // Ignorer la première ligne si nécessaire
+
+                try
+                {
+                    string poidsStr = row.Cells["Poids"].Value != null ? row.Cells["Poids"].Value.ToString().Replace("%", "") : "0";
+                    string resultatStr = row.Cells["Résultat_pondéré"].Value != null ? row.Cells["Résultat_pondéré"].Value.ToString().Replace("%", "") : "0";
+
+                    decimal poids = 0;
+                    decimal resultat = 0;
+
+                    if (Decimal.TryParse(poidsStr, out poids) && Decimal.TryParse(resultatStr, out resultat))
+                    {
+                        if (resultat > poids)
+                        {
+                            row.Cells["Résultat_pondéré"].Style.ForeColor = Color.Red;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Erreur lors de la mise en forme conditionnelle : " + ex.Message);
+                }
+            }
+
         }
+
 
         private void getAllTrigram()
         {
@@ -99,39 +241,64 @@ namespace evaluation.uc
         private decimal formuleA(decimal realisation,decimal coef,decimal poid,decimal ro) {;
             if (realisation >= coef)
             {
-                return poid * ro;
+                decimal x = (poid * ro)/100;
+                return Math.Round(x,2);
             }
             return 0;
         }
 
         private decimal formuleB(decimal poid, decimal ro)
         {
-            return poid * ro;
+            return Math.Round((poid * ro) / 100, 2);
         }
 
         private void displayValueCommission(DataGridView dataGridView)
         {
-            dataGridView.Rows[0].Cells["realisation"].Value = realisation.taux;
-            dataGridView.Rows[1].Cells["realisation"].Value = realisation.contribution;
-            dataGridView.Rows[2].Cells["realisation"].Value = realisation.dmt;
-            dataGridView.Rows[3].Cells["realisation"].Value = realisation.qualite;
-            dataGridView.Rows[4].Cells["realisation"].Value = realisation.quizz;
-            dataGridView.Rows[5].Cells["realisation"].Value = realisation.t2bPersonalisation;
-            dataGridView.Rows[6].Cells["realisation"].Value = realisation.t2bSolution;
+            dataGridView.Rows[1].Cells["Poids"].Value = tContributionPoid + "%";
+            dataGridView.Rows[2].Cells["Poids"].Value = tDmtPoid + "%";
+            dataGridView.Rows[3].Cells["Poids"].Value = tQualitePoid + "%";
+            dataGridView.Rows[4].Cells["Poids"].Value = tQuizPoid + "%";
+            dataGridView.Rows[5].Cells["Poids"].Value = tT2bPersPoid + "%";
+            dataGridView.Rows[6].Cells["Poids"].Value = tT2bSolutionPoid + "%";
+            dataGridView.Rows[7].Cells["Poids"].Value = tNotePoid + "%";
 
-            dataGridView.Rows[1].Cells["R/O"].Value = ro.contribution;
-            dataGridView.Rows[2].Cells["R/O"].Value = ro.dmt;
-            dataGridView.Rows[3].Cells["R/O"].Value = ro.qualite;
-            dataGridView.Rows[4].Cells["R/O"].Value = ro.quizz;
-            dataGridView.Rows[5].Cells["R/O"].Value = ro.t2bPersonalisation;
-            dataGridView.Rows[6].Cells["R/O"].Value = ro.t2bSolution;
+            dataGridView.Rows[1].Cells["Objectif"].Value = tContributionObjectif + "%";
+            dataGridView.Rows[2].Cells["Objectif"].Value = tDmtObjectif;
+            dataGridView.Rows[3].Cells["Objectif"].Value = tQualiteObjectif + "%";
+            dataGridView.Rows[4].Cells["Objectif"].Value = tQuizObjectif;
+            dataGridView.Rows[5].Cells["Objectif"].Value = tT2bPersObjectif + "%";
+            dataGridView.Rows[6].Cells["Objectif"].Value = tT2bSolutionObjectif + "%";
 
-            dataGridView.Rows[1].Cells["Resultat_pondéré"].Value = resultatPondere.contribution;
-            dataGridView.Rows[2].Cells["Resultat_pondéré"].Value = resultatPondere.dmt;
-            dataGridView.Rows[3].Cells["Resultat_pondéré"].Value = resultatPondere.qualite;
-            dataGridView.Rows[4].Cells["Resultat_pondéré"].Value = resultatPondere.quizz;
-            dataGridView.Rows[5].Cells["Resultat_pondéré"].Value = resultatPondere.t2bPersonalisation;
-            dataGridView.Rows[6].Cells["Resultat_pondéré"].Value = resultatPondere.t2bSolution;
+            dataGridView.Rows[1].Cells["Coefficient"].Value = tContributionCoef + "%";
+            dataGridView.Rows[2].Cells["Coefficient"].Value = tDmtCoef + "%";
+            dataGridView.Rows[3].Cells["Coefficient"].Value = tQualiteCoef + "%";
+            dataGridView.Rows[4].Cells["Coefficient"].Value = tQuizCoef;
+            dataGridView.Rows[5].Cells["Coefficient"].Value = tT2bPersCoef + "%";
+            dataGridView.Rows[6].Cells["Coefficient"].Value = tT2bSolutionCoef + "%";
+
+            dataGridView.Rows[0].Cells["Réalisation"].Value = realisation.taux + "%";
+            dataGridView.Rows[1].Cells["Réalisation"].Value = realisation.contribution + "%";
+            dataGridView.Rows[2].Cells["Réalisation"].Value = realisation.dmt;
+            dataGridView.Rows[3].Cells["Réalisation"].Value = realisation.qualite + "%";
+            dataGridView.Rows[4].Cells["Réalisation"].Value = Math.Round(realisation.quizz, 2);
+            dataGridView.Rows[5].Cells["Réalisation"].Value = realisation.t2bPersonalisation + "%";
+            dataGridView.Rows[6].Cells["Réalisation"].Value = realisation.t2bSolution + "%";
+            dataGridView.Rows[7].Cells["Réalisation"].Value = realisation.notemanageriale + "%";
+
+            dataGridView.Rows[1].Cells["R/O"].Value = ro.contribution + "%";
+            dataGridView.Rows[2].Cells["R/O"].Value = ro.dmt + "%";
+            dataGridView.Rows[3].Cells["R/O"].Value = ro.qualite + "%";
+            dataGridView.Rows[4].Cells["R/O"].Value = ro.quizz + "%";
+            dataGridView.Rows[5].Cells["R/O"].Value = ro.t2bPersonalisation + "%";
+            dataGridView.Rows[6].Cells["R/O"].Value = ro.t2bSolution + "%";
+
+            dataGridView.Rows[1].Cells["Résultat_pondéré"].Value = resultatPondere.contribution + "%";
+            dataGridView.Rows[2].Cells["Résultat_pondéré"].Value = resultatPondere.dmt + "%";
+            dataGridView.Rows[3].Cells["Résultat_pondéré"].Value = resultatPondere.qualite + "%";
+            dataGridView.Rows[4].Cells["Résultat_pondéré"].Value = resultatPondere.quizz + "%";
+            dataGridView.Rows[5].Cells["Résultat_pondéré"].Value = resultatPondere.t2bPersonalisation + "%";
+            dataGridView.Rows[6].Cells["Résultat_pondéré"].Value = resultatPondere.t2bSolution + "%";
+            dataGridView.Rows[7].Cells["Résultat_pondéré"].Value = realisation.notemanageriale + "%";
         }
 
         private void getTrigrammeData(string trigramme)
@@ -141,62 +308,95 @@ namespace evaluation.uc
 
             if (row != null)
             {
-                Trigram.trigramme = row["Trigramme"].ToString();
-                Trigram.nom = row["Nom et prénoms"].ToString();
-                Trigram.typeContrat = getTypeDeContrat(trigramme);
-                Trigram.date = row["Date de prise d appel"].ToString();
-                Trigram.mois = countMonth(Trigram.date).ToString();
-                Trigram.superviseur = row["Superviseur"].ToString();
+                type.Trigram.trigramme = row["Trigramme"].ToString();
+                type.Trigram.nom = row["Nom et prénoms"].ToString();
+                type.Trigram.typeContrat = getTypeDeContrat(trigramme);
+                type.Trigram.date = row["Date de prise d appel"].ToString();
+                //type.Trigram.mois = countMonth(type.Trigram.date).ToString();
+                type.Trigram.mois = row["Ancieneté en mois"].ToString();
+                type.Trigram.superviseur = row["Superviseur"].ToString();
+                type.Trigram.observation = row["Observations"].ToString();
+                type.Trigram.idAgent = row["Id_agent"].ToString();
+                richTextBox1.Text = type.Trigram.observation;
 
                 string taux = row["Taux_d_absentéisme"].ToString().Split('%')[0].Replace('.', ',');
                 string qualite = row["Qualité"].ToString().Split('%')[0].Replace('.', ',');
                 string quizz = row["Quizz"].ToString().Split('%')[0].Replace('.', ',');
                 string t2bPersonalisation = row["T2B_Personnalisation"].ToString().Split('%')[0].Replace('.', ',');
                 string t2bSolution = row["T2B_Solution"].ToString().Split('%')[0].Replace('.', ',');
-                string contribution = row["Contribution_individuelle"].ToString();
+                string contribution = row["R/O en CI"].ToString().Split('%')[0].Replace('.', ',');
                 string dmt = row["DMT"].ToString();
+                string notemanageriale = row["Appréciation_managériale"].ToString().ToString().Split('%')[0].Replace('.', ',');
                 try
                 {
-                    realisation.taux = decimal.Parse(taux);
-                    realisation.contribution = decimal.Parse(contribution);
-                    realisation.dmt = decimal.Parse(dmt);
-                    realisation.qualite = decimal.Parse(qualite);
-                    realisation.quizz = decimal.Parse(quizz);
-                    realisation.t2bPersonalisation = decimal.Parse(t2bPersonalisation);
-                    realisation.t2bSolution = decimal.Parse(t2bSolution);
+                    realisation.taux = taux=="" ? 0 : decimal.Parse(taux);
+                    realisation.contribution = contribution == "" ? 0 : decimal.Parse(contribution);
+                    realisation.dmt = dmt == "" ? 0 : decimal.Parse(dmt);
+                    realisation.qualite = qualite == "" ? 0 : decimal.Parse(qualite);
+                    realisation.quizz = quizz == "" ? 0 : (decimal.Parse(quizz) * 20 / 100);
+                    realisation.t2bPersonalisation = t2bPersonalisation == "" ? 0 : decimal.Parse(t2bPersonalisation);
+                    realisation.t2bSolution = t2bSolution == "" ? 0 : decimal.Parse(t2bSolution);
+                    realisation.notemanageriale = notemanageriale == "" ? 0 : decimal.Parse(notemanageriale);
 
-                    ro.contribution = realisation.contribution / tContributionObjectif.Value;
-                    ro.dmt = realisation.dmt / tDmtObjectif.Value;
-                    ro.qualite = realisation.qualite / tQualiteObjectif.Value;
-                    ro.quizz = realisation.quizz / tQuizObjectif.Value;
-                    ro.t2bPersonalisation = realisation.t2bPersonalisation / tT2bPersObjectif.Value;
-                    ro.t2bSolution = realisation.t2bSolution / tT2bSolutionObjectif.Value;
+                    ro.contribution = Math.Round((realisation.contribution / tContributionObjectif)*100,2);
 
-                    resultatPondere.contribution = formuleA(realisation.contribution, tContributionCoef.Value, tContributionPoid.Value, ro.contribution);
-                    resultatPondere.dmt = formuleB(tDmtPoid.Value, ro.dmt);
-                    resultatPondere.qualite = formuleA(realisation.qualite, tQualiteCoef.Value, tQualitePoid.Value, ro.qualite);
-                    resultatPondere.quizz = formuleA(realisation.quizz, tQuizCoef.Value, tQuizPoid.Value, ro.quizz);
-                    resultatPondere.t2bPersonalisation = formuleA(realisation.t2bPersonalisation, tT2bPersCoef.Value, tT2bPersPoid.Value, ro.t2bPersonalisation);
-                    resultatPondere.t2bSolution = formuleA(realisation.t2bSolution, tT2bSolutionCoef.Value, tT2bSolutionPoid.Value, ro.t2bSolution);
+                    _csvService = new service.CsvService("bareme.csv");
+                    string roDmt = _csvService.GetPourcentageBarem(realisation.dmt).Split('%')[0].Replace('.', ',');
+                    ro.dmt = roDmt == "" ? 0 : decimal.Parse(roDmt);
+
+                    ro.qualite = Math.Round((realisation.qualite / tQualiteObjectif) * 100, 2);
+                    ro.quizz = Math.Round(((realisation.quizz * 100) / tQuizObjectif), 2);
+                    ro.t2bPersonalisation = Math.Round((realisation.t2bPersonalisation / tT2bPersObjectif) * 100, 2);
+                    ro.t2bSolution = Math.Round((realisation.t2bSolution / tT2bSolutionObjectif) * 100, 2);
+
+                    resultatPondere.contribution = formuleA(realisation.contribution, tContributionCoef, tContributionPoid, ro.contribution);
+                    resultatPondere.dmt = formuleB(tDmtPoid, ro.dmt);
+                    resultatPondere.qualite = formuleA(realisation.qualite, tQualiteCoef, tQualitePoid, ro.qualite);
+                    resultatPondere.quizz = formuleA(realisation.quizz, tQuizCoef, tQuizPoid, ro.quizz);
+                    resultatPondere.t2bPersonalisation = formuleA(realisation.t2bPersonalisation, tT2bPersCoef, tT2bPersPoid, ro.t2bPersonalisation);
+                    resultatPondere.t2bSolution = formuleA(realisation.t2bSolution, tT2bSolutionCoef, tT2bSolutionPoid, ro.t2bSolution);
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show(e.Message);
-                    throw;
+                    realisation.taux = 0;
+                    realisation.contribution = 0;
+                    realisation.dmt = 0;
+                    realisation.qualite = 0;
+                    realisation.quizz = 0;
+                    realisation.t2bPersonalisation = 0;
+                    realisation.t2bSolution = 0;
+
+                    ro.contribution = 0;
+                    ro.dmt = 0;
+                    ro.qualite = 0;
+                    ro.quizz = 0;
+                    ro.t2bPersonalisation = 0;
+                    ro.t2bSolution = 0;
+
+                    resultatPondere.contribution = 0;
+                    resultatPondere.dmt = 0;
+                    resultatPondere.qualite = 0;
+                    resultatPondere.quizz = 0;
+                    resultatPondere.t2bPersonalisation = 0;
+                    resultatPondere.t2bSolution = 0;
                 }
 
-                lprenom.Text = Trigram.nom;
-                ltypeContrat.Text = Trigram.typeContrat;
-                ldate.Text = Trigram.date;
-                lmois.Text = Trigram.mois;
-                lsuperviseur.Text = Trigram.superviseur;
+                lprenom.Text = type.Trigram.nom;
+                lIdAgent.Text = type.Trigram.idAgent;
+                ltypeContrat.Text = type.Trigram.typeContrat;
+                ldate.Text = type.Trigram.date;
+                lmois.Text = type.Trigram.mois;
+                lsuperviseur.Text = type.Trigram.superviseur;
+                ltrigramme.Text = comboBox1.Text;
             }
             else {
                 lprenom.Text = "";
+                lIdAgent.Text = "";
                 ltypeContrat.Text = "";
                 ldate.Text = "";
                 lmois.Text = "";
                 lsuperviseur.Text = "";
+                ltrigramme.Text = "";
             }
         }
 
@@ -257,61 +457,53 @@ namespace evaluation.uc
             {
                 try
                 {
-                    string poid = row["poid"].ToString();
-                    string objectif = row["objectif"].ToString();
-                    string coef = row["coef"].ToString();
+                    string poid = row["Poids"].ToString();
+                    string objectif = row["Objectif"].ToString();
+                    string coef = row["Coefficient"].ToString();
 
-                    Parametre.poid = Convert.ToInt32(poid);
-                    Parametre.objectif = Convert.ToInt32(objectif);
-                    Parametre.coef = Convert.ToInt32(coef);
+                    type.Parametre.poid = Convert.ToInt32(poid);
+                    type.Parametre.objectif = Convert.ToInt32(objectif);
+                    type.Parametre.coef = Convert.ToInt32(coef);
 
-                    if (id=="contribution")
+                    if (id == "contribution")
                     {
-                        tContributionPoid.Value = Parametre.poid;
-                        tContributionObjectif.Value = Parametre.objectif;
-                        tContributionCoef.Value = Parametre.coef;
+                        tContributionPoid = type.Parametre.poid;
+                        tContributionObjectif = type.Parametre.objectif;
+                        tContributionCoef = type.Parametre.coef;
                     }
-                    else if (id=="dmt")
+                    else if (id == "dmt")
                     {
-                        tDmtPoid.Value = Parametre.poid;
-                        tDmtObjectif.Value = Parametre.objectif;
-                        tDmtCoef.Value = Parametre.coef;
+                        tDmtPoid = type.Parametre.poid;
+                        tDmtObjectif = type.Parametre.objectif;
+                        tDmtCoef = type.Parametre.coef;
                     }
                     else if (id == "qualite")
                     {
-                        tQualitePoid.Value = Parametre.poid;
-                        tQualiteObjectif.Value = Parametre.objectif;
-                        tQualiteCoef.Value = Parametre.coef;
+                        tQualitePoid = type.Parametre.poid;
+                        tQualiteObjectif = type.Parametre.objectif;
+                        tQualiteCoef = type.Parametre.coef;
                     }
                     else if (id == "quiz")
                     {
-                        tQuizPoid.Value = Parametre.poid;
-                        tQuizObjectif.Value = Parametre.objectif;
-                        tQuizCoef.Value = Parametre.coef;
+                        tQuizPoid = type.Parametre.poid;
+                        tQuizObjectif = type.Parametre.objectif;
+                        tQuizCoef = type.Parametre.coef;
                     }
                     else if (id == "T2B_personalisation")
                     {
-                        tT2bPersPoid.Value = Parametre.poid;
-                        tT2bPersObjectif.Value = Parametre.objectif;
-                        tT2bPersCoef.Value = Parametre.coef;
+                        tT2bPersPoid = type.Parametre.poid;
+                        tT2bPersObjectif = type.Parametre.objectif;
+                        tT2bPersCoef = type.Parametre.coef;
                     }
                     else if (id == "T2B_solution")
                     {
-                        tT2bSolutionPoid.Value = Parametre.poid;
-                        tT2bSolutionObjectif.Value = Parametre.objectif;
-                        tT2bSolutionCoef.Value = Parametre.coef;
+                        tT2bSolutionPoid = type.Parametre.poid;
+                        tT2bSolutionObjectif = type.Parametre.objectif;
+                        tT2bSolutionCoef = type.Parametre.coef;
                     }
                     else if (id == "note")
                     {
-                        tNotePoid.Value = Parametre.poid;
-                        tNoteObjectif.Value = Parametre.objectif;
-                        tNoteCoef.Value = Parametre.coef;
-                    }
-                    else if (id == "taux")
-                    {
-                        tTauxPoid.Value = Parametre.poid;
-                        tTauxObjectif.Value = Parametre.objectif;
-                        tTauxCoef.Value = Parametre.coef;
+                        tNotePoid = type.Parametre.poid;
                     }
                 }
                 catch (Exception e)
@@ -353,35 +545,60 @@ namespace evaluation.uc
         {
             updateData();
         }
-    }
 
-    public static class Trigram
-    {
-        public static string trigramme { get; set; }
-        public static string nom { get; set; }
-        public static string typeContrat { get; set; }
-        public static string date { get; set; }
-        public static string mois { get; set; }
-        public static string superviseur { get; set; }
-        public static string taux { get; set; }
-    }
+        private void panel4_Paint(object sender, PaintEventArgs e)
+        {
 
-    public static class Parametre
-    {
-        public static int poid = 0;
-        public static int objectif = 0;
-        public static int coef = 0;
-    }
+        }
 
-    public class Commission
-    {
-        public decimal taux =0;
-        public decimal contribution = 0;
-        public decimal dmt = 0;
-        public decimal qualite = 0;
-        public decimal quizz = 0;
-        public decimal t2bPersonalisation = 0;
-        public decimal t2bSolution = 0;
-        public decimal notemanageriale = 0;
+        private void label38_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel3_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            string dateTrigram = Mois[dateTimePicker1.Value.Month] + " " + dateTimePicker1.Value.Year;
+            window.ExportType exportType = new window.ExportType(
+                tContributionPoid, 
+                tContributionObjectif, 
+                tContributionCoef, 
+                tDmtPoid, 
+                tDmtObjectif, 
+                tDmtCoef, 
+                tQualitePoid, 
+                tQualiteObjectif, 
+                tQualiteCoef, 
+                tQuizPoid, 
+                tQuizObjectif, 
+                tQuizCoef, 
+                tT2bPersPoid, 
+                tT2bPersObjectif, 
+                tT2bPersCoef, 
+                tT2bSolutionPoid, 
+                tT2bSolutionObjectif, 
+                tT2bSolutionCoef, 
+                tNotePoid,
+                montant,
+                baseNumeriale,
+                dateTrigram
+                );
+            exportType.ShowDialog();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            updateData();
+        }
+
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }
