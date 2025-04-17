@@ -55,16 +55,16 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 6.516291F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 93.48371F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1099, 610);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1581, 950);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // dataGridView1
             // 
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(29, 40);
+            this.dataGridView1.Location = new System.Drawing.Point(41, 63);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(1045, 538);
+            this.dataGridView1.Size = new System.Drawing.Size(1515, 855);
             this.dataGridView1.TabIndex = 0;
             // 
             // panel1
@@ -73,10 +73,10 @@
             this.panel1.Controls.Add(this.textBox1);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel1.Location = new System.Drawing.Point(29, 3);
+            this.panel1.Location = new System.Drawing.Point(41, 3);
             this.panel1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(257, 31);
+            this.panel1.Size = new System.Drawing.Size(257, 54);
             this.panel1.TabIndex = 1;
             // 
             // textBox1
@@ -109,7 +109,7 @@
             this.Font = new System.Drawing.Font("Arial Narrow", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Name = "Data";
-            this.Size = new System.Drawing.Size(1099, 610);
+            this.Size = new System.Drawing.Size(1581, 950);
             this.tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.panel1.ResumeLayout(false);
