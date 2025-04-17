@@ -25,7 +25,7 @@ namespace evaluation.window
         type.Commission resultatPondere = new type.Commission();
         decimal tContributionPoid, tContributionObjectif, tContributionCoef, tDmtPoid, tDmtObjectif, tDmtCoef, tQualitePoid, tQualiteObjectif, tQualiteCoef, tQuizPoid, tQuizObjectif, tQuizCoef, tT2bPersPoid, tT2bPersObjectif, tT2bPersCoef, tT2bSolutionPoid, tT2bSolutionObjectif, tT2bSolutionCoef, tNotePoid, tmontant, tbaseNumeriale;
         decimal ab, cdef, g, atteinte, baseNumeriale, pvvFinal, montant;
-        string dateTrigram;
+        string dateTrigram, idAgentSelected;
         public ExportType(
             decimal tContributionPoid,
             decimal tContributionObjectif,
@@ -48,7 +48,8 @@ namespace evaluation.window
             decimal tNotePoid,
             decimal tmontant,
             decimal tbaseNumeriale,
-            string dateTrigram
+            string dateTrigram,
+            string idAgentSelected
             )
         {
             InitializeComponent();
@@ -76,6 +77,7 @@ namespace evaluation.window
             this.tmontant=tmontant;
             this.tbaseNumeriale = tbaseNumeriale;
             this.dateTrigram = dateTrigram;
+            this.idAgentSelected = idAgentSelected;
         }
 
         private void ExportToExcel(DataGridView dgv)
@@ -219,14 +221,14 @@ namespace evaluation.window
                 string notemanageriale = row["Appréciation_managériale"].ToString().ToString().Split('%')[0].Replace('.', ',');
                 try
                 {
-                    realisation.taux = taux == "" ? 0 : decimal.Parse(taux);
-                    realisation.contribution = contribution == "" ? 0 : decimal.Parse(contribution);
+                    realisation.taux = taux == "" ? 0 : Math.Round(decimal.Parse(taux) * 100);
+                    realisation.contribution = contribution == "" ? 0 : Math.Round(decimal.Parse(contribution) * 100);
                     realisation.dmt = dmt == "" ? 0 : decimal.Parse(dmt);
-                    realisation.qualite = qualite == "" ? 0 : decimal.Parse(qualite);
-                    realisation.quizz = quizz == "" ? 0 : (decimal.Parse(quizz) * 20 / 100);
-                    realisation.t2bPersonalisation = t2bPersonalisation == "" ? 0 : decimal.Parse(t2bPersonalisation);
-                    realisation.t2bSolution = t2bSolution == "" ? 0 : decimal.Parse(t2bSolution);
-                    realisation.notemanageriale = notemanageriale == "" ? 0 : decimal.Parse(notemanageriale);
+                    realisation.qualite = qualite == "" ? 0 : Math.Round(decimal.Parse(qualite) * 100);
+                    realisation.quizz = quizz == "" ? 0 : Math.Round((decimal.Parse(quizz) * 20 / 100) * 100);
+                    realisation.t2bPersonalisation = t2bPersonalisation == "" ? 0 : Math.Round(decimal.Parse(t2bPersonalisation) * 100);
+                    realisation.t2bSolution = t2bSolution == "" ? 0 : Math.Round(decimal.Parse(t2bSolution) * 100);
+                    realisation.notemanageriale = notemanageriale == "" ? 0 : Math.Round(decimal.Parse(notemanageriale) * 100);
 
                     ro.contribution = Math.Round((realisation.contribution / tContributionObjectif) * 100, 2);
 
@@ -468,111 +470,114 @@ namespace evaluation.window
 
                         if (isTrigramExport())
                         {
-                            // Ajout du titre pour chaque trigramme
-                            Paragraph title = new Paragraph("Commission " + trigramme + " en mois de " + this.dateTrigram + " \n", titleFont);
-                            title.Alignment = Element.ALIGN_CENTER;
-                            doc.Add(title);
+                            if (idAgentSelected==type.Trigram.idAgent || idAgentSelected=="")
+                            {
+                                // Ajout du titre pour chaque trigramme
+                                Paragraph title = new Paragraph("Commission " + trigramme + " en mois de " + this.dateTrigram + " \n", titleFont);
+                                title.Alignment = Element.ALIGN_CENTER;
+                                doc.Add(title);
 
-                            // Ajout des informations du trigramme
-                            doc.Add(new Paragraph("Nom et prénoms : " + type.Trigram.nom, normalFont));
-                            doc.Add(new Paragraph("Id Agent : " + type.Trigram.idAgent, normalFont));
-                            doc.Add(new Paragraph("Type de Contrat : " + type.Trigram.typeContrat, normalFont));
-                            doc.Add(new Paragraph("Date de prise d'appel : " + type.Trigram.date, normalFont));
-                            doc.Add(new Paragraph("Ancienneté en mois : " + type.Trigram.mois, normalFont));
-                            doc.Add(new Paragraph("Superviseur : " + type.Trigram.superviseur + "\n", normalFont));
+                                // Ajout des informations du trigramme
+                                doc.Add(new Paragraph("Nom et prénoms : " + type.Trigram.nom, normalFont));
+                                doc.Add(new Paragraph("Id Agent : " + type.Trigram.idAgent, normalFont));
+                                doc.Add(new Paragraph("Type de Contrat : " + type.Trigram.typeContrat, normalFont));
+                                doc.Add(new Paragraph("Date de prise d'appel : " + type.Trigram.date, normalFont));
+                                doc.Add(new Paragraph("Ancienneté en mois : " + type.Trigram.mois, normalFont));
+                                doc.Add(new Paragraph("Superviseur : " + type.Trigram.superviseur + "\n", normalFont));
 
-                            PdfPTable table = new PdfPTable(7);
-                            table.WidthPercentage = 100; // Ajuste la largeur du tableau pour prendre toute la page
-                            table.SetWidths(new float[] { 3f, 1f, 1f, 1f, 1f, 1f, 1f }); // Ajuste la largeur des colonnes
+                                PdfPTable table = new PdfPTable(7);
+                                table.WidthPercentage = 100; // Ajuste la largeur du tableau pour prendre toute la page
+                                table.SetWidths(new float[] { 3f, 1f, 1f, 1f, 1f, 1f, 1f }); // Ajuste la largeur des colonnes
 
-                            // Ajoutez une marge de 3px (en points, où 1px = 0.75 point)
-                            table.SpacingBefore = 5f; // Définit une marge de 3 pixels (en points)
+                                // Ajoutez une marge de 3px (en points, où 1px = 0.75 point)
+                                table.SpacingBefore = 5f; // Définit une marge de 3 pixels (en points)
 
-                            table.AddCell(new PdfPCell(new Phrase("Indicateurs", boldFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
-                            table.AddCell(new PdfPCell(new Phrase("Poids", boldFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
-                            table.AddCell(new PdfPCell(new Phrase("Objectif", boldFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
-                            table.AddCell(new PdfPCell(new Phrase("Coefficient", boldFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
-                            table.AddCell(new PdfPCell(new Phrase("Réalisation", boldFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
-                            table.AddCell(new PdfPCell(new Phrase("R/0", boldFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
-                            table.AddCell(new PdfPCell(new Phrase("Résultats pondérés", boldFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
+                                table.AddCell(new PdfPCell(new Phrase("Indicateurs", boldFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
+                                table.AddCell(new PdfPCell(new Phrase("Poids", boldFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
+                                table.AddCell(new PdfPCell(new Phrase("Objectif", boldFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
+                                table.AddCell(new PdfPCell(new Phrase("Coefficient", boldFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
+                                table.AddCell(new PdfPCell(new Phrase("Réalisation", boldFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
+                                table.AddCell(new PdfPCell(new Phrase("R/0", boldFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
+                                table.AddCell(new PdfPCell(new Phrase("Résultats pondérés", boldFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
 
-                            // Ajout des données dans le tableau
-                            table.AddCell(new PdfPCell(new Phrase("Taux d'absentéisme")) { HorizontalAlignment = Element.ALIGN_LEFT });
-                            table.AddCell(new PdfPCell(new Phrase("")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase("")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase("")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(realisation.taux.ToString("F2")+"%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase("")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase("")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                // Ajout des données dans le tableau
+                                table.AddCell(new PdfPCell(new Phrase("Taux d'absentéisme")) { HorizontalAlignment = Element.ALIGN_LEFT });
+                                table.AddCell(new PdfPCell(new Phrase("")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase("")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase("")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(realisation.taux.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase("")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase("")) { HorizontalAlignment = Element.ALIGN_RIGHT });
 
-                            table.AddCell(new PdfPCell(new Phrase("Productivité (R/O en contribution individuelle aux appels traités)")) { HorizontalAlignment = Element.ALIGN_LEFT });
-                            table.AddCell(new PdfPCell(new Phrase(tContributionPoid.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(tContributionObjectif.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(tContributionCoef.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(realisation.contribution.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(ro.contribution.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(resultatPondere.contribution.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase("Productivité (R/O en contribution individuelle aux appels traités)")) { HorizontalAlignment = Element.ALIGN_LEFT });
+                                table.AddCell(new PdfPCell(new Phrase(tContributionPoid.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(tContributionObjectif.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(tContributionCoef.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(realisation.contribution.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(ro.contribution.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(resultatPondere.contribution.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
 
-                            table.AddCell(new PdfPCell(new Phrase("DMT")) { HorizontalAlignment = Element.ALIGN_LEFT });
-                            table.AddCell(new PdfPCell(new Phrase(tDmtPoid.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(tDmtObjectif.ToString("F2"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(tDmtCoef.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(realisation.dmt.ToString("F2"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(ro.dmt.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(resultatPondere.dmt.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase("DMT")) { HorizontalAlignment = Element.ALIGN_LEFT });
+                                table.AddCell(new PdfPCell(new Phrase(tDmtPoid.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(tDmtObjectif.ToString("F2"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(tDmtCoef.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(realisation.dmt.ToString("F2"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(ro.dmt.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(resultatPondere.dmt.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
 
-                            table.AddCell(new PdfPCell(new Phrase("Evaluation qualitative (note moyenne)")) { HorizontalAlignment = Element.ALIGN_LEFT });
-                            table.AddCell(new PdfPCell(new Phrase(tQualitePoid.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(tQualiteObjectif.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(tQualiteCoef.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(realisation.qualite.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(ro.qualite.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(resultatPondere.qualite.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase("Evaluation qualitative (note moyenne)")) { HorizontalAlignment = Element.ALIGN_LEFT });
+                                table.AddCell(new PdfPCell(new Phrase(tQualitePoid.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(tQualiteObjectif.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(tQualiteCoef.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(realisation.qualite.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(ro.qualite.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(resultatPondere.qualite.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
 
-                            table.AddCell(new PdfPCell(new Phrase("Quizz")) { HorizontalAlignment = Element.ALIGN_LEFT });
-                            table.AddCell(new PdfPCell(new Phrase(tQuizPoid.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(tQuizObjectif.ToString("F2"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(tQuizCoef.ToString("F2"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(realisation.quizz.ToString("F2"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(ro.quizz.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(resultatPondere.quizz.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase("Quizz")) { HorizontalAlignment = Element.ALIGN_LEFT });
+                                table.AddCell(new PdfPCell(new Phrase(tQuizPoid.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(tQuizObjectif.ToString("F2"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(tQuizCoef.ToString("F2"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(realisation.quizz.ToString("F2"))) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(ro.quizz.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(resultatPondere.quizz.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
 
-                            table.AddCell(new PdfPCell(new Phrase("Satisfaction client  sur la personnalisation du traitement  (TTB)")) { HorizontalAlignment = Element.ALIGN_LEFT });
-                            table.AddCell(new PdfPCell(new Phrase(tT2bPersPoid.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(tT2bPersObjectif.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(tT2bPersCoef.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(realisation.t2bPersonalisation.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(ro.t2bPersonalisation.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(resultatPondere.t2bPersonalisation.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase("Satisfaction client  sur la personnalisation du traitement  (TTB)")) { HorizontalAlignment = Element.ALIGN_LEFT });
+                                table.AddCell(new PdfPCell(new Phrase(tT2bPersPoid.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(tT2bPersObjectif.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(tT2bPersCoef.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(realisation.t2bPersonalisation.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(ro.t2bPersonalisation.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(resultatPondere.t2bPersonalisation.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
 
-                            table.AddCell(new PdfPCell(new Phrase("Satisfaction client sur solution proposée (TTB)")) { HorizontalAlignment = Element.ALIGN_LEFT });
-                            table.AddCell(new PdfPCell(new Phrase(tT2bSolutionPoid.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(tT2bSolutionObjectif.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(tT2bSolutionCoef.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(realisation.t2bSolution.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(ro.t2bSolution.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(resultatPondere.t2bSolution.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase("Satisfaction client sur solution proposée (TTB)")) { HorizontalAlignment = Element.ALIGN_LEFT });
+                                table.AddCell(new PdfPCell(new Phrase(tT2bSolutionPoid.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(tT2bSolutionObjectif.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(tT2bSolutionCoef.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(realisation.t2bSolution.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(ro.t2bSolution.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(resultatPondere.t2bSolution.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
 
-                            table.AddCell(new PdfPCell(new Phrase("Appréciation managériale ")) { HorizontalAlignment = Element.ALIGN_LEFT });
-                            table.AddCell(new PdfPCell(new Phrase(tNotePoid.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase("")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase("")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(realisation.notemanageriale.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase("")) { HorizontalAlignment = Element.ALIGN_RIGHT });
-                            table.AddCell(new PdfPCell(new Phrase(realisation.notemanageriale.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase("Appréciation managériale ")) { HorizontalAlignment = Element.ALIGN_LEFT });
+                                table.AddCell(new PdfPCell(new Phrase(tNotePoid.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase("")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase("")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(realisation.notemanageriale.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase("")) { HorizontalAlignment = Element.ALIGN_RIGHT });
+                                table.AddCell(new PdfPCell(new Phrase(realisation.notemanageriale.ToString("F2") + "%")) { HorizontalAlignment = Element.ALIGN_RIGHT });
 
-                            // Ajoute le tableau au document
-                            doc.Add(table);
+                                // Ajoute le tableau au document
+                                doc.Add(table);
 
-                            // Ajout du score final
-                            doc.Add(new Paragraph("PV1 : " + ab + "%", normalFont));
-                            doc.Add(new Paragraph("PV2 : " + cdef + "%", normalFont));
-                            doc.Add(new Paragraph("PV3 : " + g + "%", normalFont));
-                            doc.Add(new Paragraph("% d'atteinte des objectifs : " + atteinte + "%", normalFont));
-                            doc.Add(new Paragraph("Base numéraire : " + baseNumeriale.ToString("#,##0") + " Ar", normalFont));
-                            doc.Add(new Paragraph("PVV final : " + pvvFinal.ToString("#,##0") + " Ar", normalFont));
-                            doc.Add(new Paragraph("Montant commission en Ar arrondi : " + montant.ToString("#,##0") + " Ar", normalFont));
-                            doc.Add(new Paragraph("Observation : " + type.Trigram.observation, normalFont));   
+                                // Ajout du score final
+                                doc.Add(new Paragraph("PV1 : " + ab + "%", normalFont));
+                                doc.Add(new Paragraph("PV2 : " + cdef + "%", normalFont));
+                                doc.Add(new Paragraph("PV3 : " + g + "%", normalFont));
+                                doc.Add(new Paragraph("% d'atteinte des objectifs : " + atteinte + "%", normalFont));
+                                doc.Add(new Paragraph("Base numéraire : " + baseNumeriale.ToString("#,##0") + " Ar", normalFont));
+                                doc.Add(new Paragraph("PVV final : " + pvvFinal.ToString("#,##0") + " Ar", normalFont));
+                                doc.Add(new Paragraph("Montant commission en Ar arrondi : " + montant.ToString("#,##0") + " Ar", normalFont));
+                                doc.Add(new Paragraph("Observation : " + type.Trigram.observation, normalFont));   
+                            }
                         }
                     }
 

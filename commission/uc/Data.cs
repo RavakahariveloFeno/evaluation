@@ -27,27 +27,49 @@ namespace evaluation.uc
 
         private void getAll()
         {
-            //dataGridView1.DataSource = _dataService.getAll();
             dt = _dataService.getAll();
+
             if (dt.Rows.Count > 0)
             {
+                // Affecter la source au DataGridView
                 dataGridView1.DataSource = dt;
 
+                // Liste des colonnes à modifier
+                string[] colonnesAMultiplier = new string[]
+                {
+                    "Taux_d_absentéisme",
+                    "R/O en CI",
+                    "Qualité",
+                    "Taux de réussite",
+                    "Quizz",
+                    "T2B_Personnalisation",
+                    "T2B_Solution",
+                    "Appréciation_managériale"
+                };
+
+                // Appliquer un format personnalisé sur les colonnes concernées
+                foreach (string colName in colonnesAMultiplier)
+                {
+                    if (dataGridView1.Columns.Contains(colName))
+                    {
+                        dataGridView1.Columns[colName].DefaultCellStyle.Format = "P2"; // pourcentage avec 2 décimales
+                    }
+                }
+
                 // Masquer les colonnes non désirées
-                if (dataGridView1.Columns.Contains("PV1"))
-                    dataGridView1.Columns["PV1"].Visible = false;
-                if (dataGridView1.Columns.Contains("PV2"))
-                    dataGridView1.Columns["PV2"].Visible = false;
-                if (dataGridView1.Columns.Contains("PV3"))
-                    dataGridView1.Columns["PV3"].Visible = false;
-                if (dataGridView1.Columns.Contains("Montant_commission"))
-                    dataGridView1.Columns["Montant_commission"].Visible = false;
-                if (dataGridView1.Columns.Contains("Observations"))
-                    dataGridView1.Columns["Observations"].Visible = false;
-                if (dataGridView1.Columns.Contains("Montant_commission"))
-                    dataGridView1.Columns["Montant_commission"].Visible = false;
+                string[] colonnesAmasquer = new string[]
+                {
+                    "PV1", "PV2", "PV3", "Montant_commission", "Observations"
+                };
+
+                foreach (string col in colonnesAmasquer)
+                {
+                    if (dataGridView1.Columns.Contains(col))
+                        dataGridView1.Columns[col].Visible = false;
+                }
             }
         }
+
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {

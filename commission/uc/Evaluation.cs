@@ -43,6 +43,7 @@ namespace evaluation.uc
 
             getParametre();
             getAllTrigram();
+            getAllIdAgent();
             getAllEvaluation();
             getAllIndicateur();
         }
@@ -238,6 +239,29 @@ namespace evaluation.uc
             }
         }
 
+        private void getAllIdAgent()
+        {
+            // Récupérer le DataTable depuis la méthode getAll avec la colonne "ID_agent"
+            DataTable dt = _dataService.getAll("ID_agent");
+
+            // Vérifier si le DataTable n'est pas null et contient des données
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                // Supprimer les doublons sur la colonne "ID_agent"
+                DataView view = new DataView(dt);
+                DataTable distinctTable = view.ToTable(true, "ID_agent"); // 'true' = distinct
+
+                // Ajouter une ligne vide au début du DataTable
+                DataRow emptyRow = distinctTable.NewRow();
+                distinctTable.Rows.InsertAt(emptyRow, 0);  // Insérer la ligne vide en première position
+
+                // Définir la source de données pour le ComboBox
+                comboBox2.DataSource = distinctTable;
+                comboBox2.DisplayMember = "ID_agent";
+                comboBox2.ValueMember = "ID_agent";
+            }
+        }
+
         private decimal formuleA(decimal realisation,decimal coef,decimal poid,decimal ro) {;
             if (realisation >= coef)
             {
@@ -327,16 +351,17 @@ namespace evaluation.uc
                 string contribution = row["R/O en CI"].ToString().Split('%')[0].Replace('.', ',');
                 string dmt = row["DMT"].ToString();
                 string notemanageriale = row["Appréciation_managériale"].ToString().ToString().Split('%')[0].Replace('.', ',');
+
                 try
                 {
-                    realisation.taux = taux=="" ? 0 : decimal.Parse(taux);
-                    realisation.contribution = contribution == "" ? 0 : decimal.Parse(contribution);
+                    realisation.taux = taux=="" ? 0 : Math.Round(decimal.Parse(taux) * 100);
+                    realisation.contribution = contribution == "" ? 0 : Math.Round(decimal.Parse(contribution) * 100);
                     realisation.dmt = dmt == "" ? 0 : decimal.Parse(dmt);
-                    realisation.qualite = qualite == "" ? 0 : decimal.Parse(qualite);
-                    realisation.quizz = quizz == "" ? 0 : (decimal.Parse(quizz) * 20 / 100);
-                    realisation.t2bPersonalisation = t2bPersonalisation == "" ? 0 : decimal.Parse(t2bPersonalisation);
-                    realisation.t2bSolution = t2bSolution == "" ? 0 : decimal.Parse(t2bSolution);
-                    realisation.notemanageriale = notemanageriale == "" ? 0 : decimal.Parse(notemanageriale);
+                    realisation.qualite = qualite == "" ? 0 : Math.Round(decimal.Parse(qualite) * 100);
+                    realisation.quizz = quizz == "" ? 0 : Math.Round((decimal.Parse(quizz) * 20 / 100) * 100);
+                    realisation.t2bPersonalisation = t2bPersonalisation == "" ? 0 : Math.Round(decimal.Parse(t2bPersonalisation) * 100);
+                    realisation.t2bSolution = t2bSolution == "" ? 0 : Math.Round(decimal.Parse(t2bSolution) * 100);
+                    realisation.notemanageriale = notemanageriale == "" ? 0 : Math.Round(decimal.Parse(notemanageriale) * 100);
 
                     ro.contribution = Math.Round((realisation.contribution / tContributionObjectif)*100,2);
 
@@ -586,7 +611,8 @@ namespace evaluation.uc
                 tNotePoid,
                 montant,
                 baseNumeriale,
-                dateTrigram
+                dateTrigram,
+                comboBox2.Text
                 );
             exportType.ShowDialog();
         }
